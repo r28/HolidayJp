@@ -1,0 +1,317 @@
+[
+  {
+    month: 1
+    day: 1
+    name: 元日
+    start_year: 1949
+    end_year: 9999
+  }
+  {
+    month: 2
+    day: 11
+    name: 建国記念の日
+    start_year: 1967
+    end_year: 9999
+  }
+  {
+    month: 5
+    day: 3
+    name: 憲法記念日
+    start_year: 1949
+    end_year: 9999
+  }
+  {
+    month: 5
+    day: 5
+    name: こどもの日
+    start_year: 1949
+    end_year: 9999
+  }
+  {
+    month: 11
+    day: 3
+    name: 文化の日
+    start_year: 1948
+    end_year: 9999
+  }
+  {
+    month: 11
+    day: 23
+    name: 勤労感謝の日
+    start_year: 1948
+    end_year: 9999
+  }
+  {
+    month: 1
+    day: 15
+    name: 成人の日
+    start_year: 1949
+    end_year: 1999
+  }
+  {
+    month: 2
+    day: 23
+    name: 天皇誕生日
+    start_year: 2020
+    end_year: 9999
+  }
+  {
+    month: 4
+    day: 29
+    name: 天皇誕生日
+    start_year: 1949
+    end_year: 1988
+  }
+  {
+    month: 4
+    day: 29
+    name: みどりの日
+    start_year: 1989
+    end_year: 2006
+  }
+  {
+    month: 4
+    day: 29
+    name: 昭和の日
+    start_year: 2007
+    end_year: 9999
+  }
+  {
+    month: 5
+    day: 4
+    name: 国民の休日
+    start_year: 1988
+    end_year: 2006
+  }
+  {
+    month: 5
+    day: 4
+    name: みどりの日
+    start_year: 2007
+    end_year: 9999
+  }
+  {
+    month: 7
+    day: 20
+    name: 海の日
+    start_year: 1996
+    end_year: 2002
+  }
+  {
+    month: 8
+    day: 11
+    name: 山の日
+    start_year: 2016
+    end_year: 9999
+  }
+  {
+    month: 9
+    day: 15
+    name: 敬老の日
+    start_year: 1966
+    end_year: 2002
+  }
+  {
+    month: 10
+    day: 10
+    name: 体育の日
+    start_year: 1966
+    end_year: 1999
+  }
+  {
+    month: 12
+    day: 23
+    name: 天皇誕生日
+    start_year: 1989
+    end_year: 2018
+  }
+  {
+    month: 11
+    day: 10
+    name: 大正天皇即位の礼
+    start_year: 1915
+    end_year: 1915
+  }
+  {
+    month: 11
+    day: 14
+    name: 大正天皇大嘗祭
+    start_year: 1915
+    end_year: 1915
+  }
+  {
+    month: 11
+    day: 16
+    name: 大正天皇大饗第1日
+    start_year: 1915
+    end_year: 1915
+  }
+  {
+    month: 11
+    day: 10
+    name: 昭和天皇即位の礼
+    start_year: 1928
+    end_year: 1928
+  }
+  {
+    month: 11
+    day: 14
+    name: 昭和天皇大嘗祭
+    start_year: 1928
+    end_year: 1928
+  }
+  {
+    month: 11
+    day: 16
+    name: 昭和天皇大饗第1日
+    start_year: 1928
+    end_year: 1928
+  }
+  {
+    month: 4
+    day: 10
+    name: 皇太子明仁親王の結婚の儀
+    start_year: 1959
+    end_year: 1959
+  }
+  {
+    month: 2
+    day: 24
+    name: 昭和天皇の大喪の礼
+    start_year: 1989
+    end_year: 1989
+  }
+  {
+    month: 11
+    day: 12
+    name: 即位の礼正殿の儀
+    start_year: 1990
+    end_year: 1990
+  }
+  {
+    month: 6
+    day: 9
+    name: 皇太子徳仁親王の結婚の儀
+    start_year: 1993
+    end_year: 1993
+  }
+  {
+    month: 5
+    day: 1
+    name: 天皇即位の日
+    start_year: 2019
+    end_year: 2019
+  }
+  {
+    month: 10
+    day: 22
+    name: 即位礼正殿の儀
+    start_year: 2019
+    end_year: 2019
+  }
+  {
+    month: 1
+    day: 3
+    name: 元始祭
+    start_year: 1874
+    end_year: 1948
+  }
+  {
+    month: 1
+    day: 5
+    name: 新年宴会
+    start_year: 1874
+    end_year: 1948
+  }
+  {
+    month: 1
+    day: 30
+    name: 孝明天皇祭
+    start_year: 1874
+    end_year: 1912
+  }
+  {
+    month: 2
+    day: 11
+    name: 紀元節
+    start_year: 1874
+    end_year: 1948
+  }
+  {
+    month: 4
+    day: 3
+    name: 神武天皇祭
+    start_year: 1874
+    end_year: 1948
+  }
+  {
+    month: 9
+    day: 17
+    name: 神嘗祭
+    start_year: 1874
+    end_year: 1878
+  }
+  {
+    month: 11
+    day: 3
+    name: 天長節
+    start_year: 1873
+    end_year: 1911
+  }
+  {
+    month: 11
+    day: 23
+    name: 新嘗祭
+    start_year: 1873
+    end_year: 1947
+  }
+  {
+    month: 10
+    day: 17
+    name: 神嘗祭
+    start_year: 1879
+    end_year: 1911
+  }
+  {
+    month: 7
+    day: 30
+    name: 明治天皇祭
+    start_year: 1912
+    end_year: 1926
+  }
+  {
+    month: 8
+    day: 31
+    name: 天長節
+    start_year: 1912
+    end_year: 1926
+  }
+  {
+    month: 10
+    day: 31
+    name: 天長節祝日
+    start_year: 1913
+    end_year: 1926
+  }
+  {
+    month: 11
+    day: 3
+    name: 明治節
+    start_year: 1927
+    end_year: 1947
+  }
+  {
+    month: 12
+    day: 25
+    name: 大正天皇祭
+    start_year: 1927
+    end_year: 1947
+  }
+  {
+    month: 4
+    day: 29
+    name: 天長節
+    start_year: 1927
+    end_year: 1948
+  }
+]

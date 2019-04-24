@@ -1,0 +1,32 @@
+{
+    "name": "r28/holiday-jp",
+    "description": "Judges datetime japanese holiday",
+    "type": "library",
+    "require-dev": {
+        "cakephp/chronos": "^1.2",
+        "phpunit/phpunit": "^7.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "r28",
+            "email": "r28@redmagic.cc"
+        }
+    ],
+    "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/r28/AstroTime.git"
+        }
+    ],
+    "require": {
+        "r28/astro-time": "1.*",
+        "laktak/hjson": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "r28\\HolidayJp\\": "src/HolidayJp/"
+        }
+    }
+}

@@ -1,0 +1,37 @@
+[
+  {
+    month: 1
+    week: 2
+    name: 成人の日
+    start_year: 2000
+    end_year: 9999
+  }
+  {
+    month: 7
+    week: 3
+    name: 海の日
+    start_year: 2003
+    end_year: 9999
+  }
+  {
+    month: 9
+    week: 3
+    name: 敬老の日
+    start_year: 2003
+    end_year: 9999
+  }
+  {
+    month: 10
+    week: 2
+    name: 体育の日
+    start_year: 2000
+    end_year: 2019
+  }
+  {
+    month: 10
+    week: 2
+    name: スポーツの日
+    start_year: 2021
+    end_year: 9999
+  }
+]
