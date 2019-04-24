@@ -3,7 +3,6 @@
  * Japanese Holiday judgement library
  *  Copyright (c) r28 (https://redmagic.cc)
  *
- * @require cakephp/chronos     : https://github.com/cakephp/chronos
  * @require r28/AstroTime       : https://github.com/r28/AstroTime
  * @require laktak/hjson        : https://packagist.org/packages/laktak/hjson
  * @require settings/*.hjson    : Setting files for any holidays

@@ -3,7 +3,6 @@
     "description": "Judges datetime japanese holiday",
     "type": "library",
     "require-dev": {
-        "cakephp/chronos": "^1.2",
         "phpunit/phpunit": "^7.5"
     },
     "license": "MIT",
