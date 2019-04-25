@@ -1,4 +1,5 @@
 # HolidayJp
+[![Build Status](https://travis-ci.org/r28/HolidayJp.svg?branch=master)](https://travis-ci.org/r28/HolidayJp)
 Japanese Holiday judgement library
 日本の祝日を判定するライブラリ。
 日付を与えると
