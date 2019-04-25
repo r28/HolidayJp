@@ -13,14 +13,8 @@
         }
     ],
     "minimum-stability": "stable",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/r28/AstroTime.git"
-        }
-    ],
     "require": {
-        "r28/astro-time": "1.*",
+        "r28/astro-time": "^1.0",
         "laktak/hjson": "^2.1"
     },
     "autoload": {

@@ -38,6 +38,12 @@ require_once 'libs/Equinox.php';
 class HolidayJp
 {
     /**
+     * TimezoneName (日本が前提)
+     * @constant
+     */
+    const TIMEZONE_NAME = 'Asia/Tokyo';
+
+    /**
      * 休日の名称
      * @constant
      */
@@ -55,12 +61,6 @@ class HolidayJp
      * @constant
      */
     const NATIONAL_HOLIDAY_START = '1985-12-27';
-
-    /**
-     * Timezone名
-     * @constant
-     */
-    const TIMEZONE_NAME = 'Asia/Tokyo';
 
     /**
      * 対象日付AstroTimeオブジェクト
@@ -120,7 +120,13 @@ class HolidayJp
         'specified_moved',
     ];
 
+    /**
+     * Constructor
+     * 
+     * @param   AstroTime|string    $date   AstroTimeオブジェクト または 日付文字列
+     */
     public function __construct($date=null) {
+        date_default_timezone_set(static::TIMEZONE_NAME);
         if(! empty($date)) {
             $this->setDate($date);
         }
@@ -131,11 +137,11 @@ class HolidayJp
     /**
      * 対象日付セット
      * 
-     * @param   string  $date
+     * @param   AstroTime|string    $date   AstroTimeオブジェクト または 日付文字列
      * @return  HolidayJp
      */
     public function setDate($date) {
-        $dt = new AstroTime($date);
+        $dt = (gettype($date) == 'object') ? $date : new AstroTime($date, static::TIMEZONE_NAME);
         $this->date = $dt;
         return $this;
     }
@@ -270,7 +276,7 @@ class HolidayJp
      */
     public static function isMondayMakeupHoliday(AstroTime $date, $stationaly_params=null, $is_check_holiday=false) {
         // 施行日より前
-        $enforce = new AstroTime(self::MONDAY_MAKEUP_HOLIDAY_START." 00:00:00");
+        $enforce = new AstroTime(self::MONDAY_MAKEUP_HOLIDAY_START." 00:00:00", static::TIMEZONE_NAME);
         if ($date < $enforce) return false;
 
         if ($is_check_holiday && self::stationalyHoliday($date, $stationaly_params)) return false;
@@ -317,8 +323,7 @@ class HolidayJp
      * @return  string|boolean          祝日名
      */
     public static function holidayNameFromDate($date_string) {
-        $date = new AstroTime($date_string, static::TIMEZONE_NAME, false);
-        $hd   = new HolidayJp($date);
+        $hd   = new HolidayJp($date_string);
         return $hd->holidayName();
     }
 
@@ -329,7 +334,7 @@ class HolidayJp
      * @return  string|boolean  祝日名
      */
     public static function holidayNameFromTimestamp($timestamp) {
-        $date = AstroTime::createFromTimestamp($timestamp, self::TIMEZONE_NAME, false);
+        $date = AstroTime::createFromTimestamp($timestamp, static::TIMEZONE_NAME, false);
         $hd   = new HolidayJp($date);
         return $hd->holidayName();
     }
@@ -361,12 +366,12 @@ class HolidayJp
      */
     public static function holidayNamesFromYear($year=null, $key='date_string', $is_only_holiday=false) {
         if (is_null($year) || ! is_numeric($year)) {
-            $time = AstroTime::create();
+            $time = AstroTime::create(null, null, null, null, null, null, static::TIMEZONE_NAME, false);
             $start = $time->startOfYear();
             $end   = $time->endOfYear();
         } else {
-            $start = new AstroTime("{$year}-01-01", null, false);
-            $end   = new AstroTime("{$year}-12-31", null, false);
+            $start = new AstroTime("{$year}-01-01", static::TIMEZONE_NAME, false);
+            $end   = new AstroTime("{$year}-12-31", static::TIMEZONE_NAME, false);
         }
 
         return self::itteratePeriodsFromDate($start, $end, $key, $is_only_holiday);
@@ -389,11 +394,11 @@ class HolidayJp
      */
     public static function holidayNamesFromYearMonth($year=null, $month=null, $key='date_string', $is_only_holiday=false) {
         if (is_null($year) || is_null($month) || ! is_numeric($year) || ! is_numeric($month)) {
-            $time = AstroTime::create();
+            $time = AstroTime::create(null, null, null, null, null, null, static::TIMEZONE_NAME, false);
             $start = $time->startOfMonth();
             $end   = $time->endOfMonth();
         } else {
-            $start = new AstroTime("{$year}-{$month}-01", null, false);
+            $start = new AstroTime("{$year}-{$month}-01", static::TIMEZONE_NAME, false);
             $end   = $start->endOfMonth();
         }
 
@@ -403,13 +408,20 @@ class HolidayJp
     /**
      * 指定期間(開始日=>終了日)について毎日の祝日判定、指定キーの一覧を返却
      * 
-     * @param   AstroTime   $start  期間開始日のAstroTimeオブジェクト
-     * @param   AstroTime   $end    期間終了日のAstroTimeオブジェクト
-     * @param   string      $key    返却される一覧のキー:
-     * @param   boolean     $is_only_holiday    true: 祝日の日のみのarrayを返却する
+     * @param   AstroTime|string    $start  期間開始日のAstroTimeオブジェクト (または日付文字列)
+     * @param   AstroTime|string    $end    期間終了日のAstroTimeオブジェクト (または日付文字列)
+     * @param   string              $key    返却される一覧のキー:
+     * @param   boolean             $is_only_holiday    true: 祝日の日のみのarrayを返却する
      * @return  array
      */
-    private static function itteratePeriodsFromDate($start, $end, $key, $is_only_holiday) {
+    public static function itteratePeriodsFromDate($start, $end, $key, $is_only_holiday=false) {
+        if (gettype($start)=='string') {
+            $start = new AstroTime($start, static::TIMEZONE_NAME, false);
+        }
+        if (gettype($end)=='string') {
+            $end = new AstroTime($end, static::TIMEZONE_NAME, false);
+        }
+
         $hd = new HolidayJp;
         $date = $start;
         $holidays = [];
