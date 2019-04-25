@@ -1,5 +1,6 @@
 # HolidayJp
 [![Build Status](https://travis-ci.org/r28/HolidayJp.svg?branch=master)](https://travis-ci.org/r28/HolidayJp)
+
 Japanese Holiday judgement library
 日本の祝日を判定するライブラリ。
 日付を与えると
@@ -19,7 +20,7 @@ HolidayJp requires the following to run:
 # Install
 Use composer:
 ```bash
-$ composer require r28/HolidayJp
+$ composer require r28/holiday-jp
 ```
 
 # Usage
