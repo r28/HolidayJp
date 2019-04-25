@@ -166,6 +166,7 @@ class HolidayJp
      * 祝日判定
      *
      * @param   AstroTime       対象日付のAstroTimeオブジェクト
+     * @throws  Exception       $dateが指定されていない場合
      * @return  string|boolean  祝日名 (祝日でない場合: false)
      */
     public function holidayName(AstroTime $date=null) {
@@ -173,7 +174,7 @@ class HolidayJp
             if (! is_null($this->date)) {
                 $date = $this->date;
             } else {
-                throw new Exception("Date: AstroTime is not granted");
+                throw new \Exception("Date: AstroTime is not granted");
             }
         }
 
