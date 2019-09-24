@@ -413,9 +413,10 @@ class HolidayJp
      * @param   AstroTime|string    $end    期間終了日のAstroTimeオブジェクト (または日付文字列)
      * @param   string              $key    返却される一覧のキー:
      * @param   boolean             $is_only_holiday    true: 祝日の日のみのarrayを返却する
+     * @param   boolean             $with_astro_time    true: 祝日名称だけでなくAstroTime Object も返す
      * @return  array
      */
-    public static function itteratePeriodsFromDate($start, $end, $key, $is_only_holiday=false) {
+    public static function itteratePeriodsFromDate($start, $end, $key, $is_only_holiday=false, $with_astro_time=false) {
         if (gettype($start)=='string') {
             $start = new AstroTime($start, static::TIMEZONE_NAME, false);
         }
@@ -432,7 +433,12 @@ class HolidayJp
             $_key = static::dateTimeForKey($date, $key);
 
             if (! $is_only_holiday || $holiday) {
-                $holidays[$_key] = $holiday;
+                if ($with_astro_time) {
+                    $holidays[$_key]['name'] = $holiday;
+                    $holidays[$_key]['time'] = $date;
+                } else {
+                    $holidays[$_key] = $holiday;
+                }
             }
 
             // Add 1 day

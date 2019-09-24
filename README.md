@@ -119,7 +119,7 @@ use r28\HolidayJp\HolidayJp;
 
 - Staticに 開始日, 終了日 を日付文字列で指定して指定期間の祝日を Array で取得 [itteratePeriodsFromDate() ]
     ```php
-    $holidays = HolidayJp::itteratePeriodsFromDate('2019-01-01', '2019-04-01', 'date_string', true);
+    $holidays = HolidayJp::itteratePeriodsFromDate('2019-01-01', '2019-04-01', 'date_string', true, false);
     print_r($holidays);
 
     Array
@@ -132,7 +132,50 @@ use r28\HolidayJp\HolidayJp;
     ```
     - 第1引数 : 開始日(string)
     - 第2引数 : 終了日(string)
-    - 第3引数以降は holidayNamesFromYear() の第2引数以降と同様
+    - 第2引数 : 返却される Array の Key の形式
+        - date_string : Y-m-d (string)
+        - date_slash  : Y/m/d
+        - date_short  : Ymd
+        - timestamp   : Unix Timestamp (integer)
+        - julian      : ユリウス日 (float)
+    - 第3引数: true = 指定期間中の祝日のみを返却する, false = 指定期間全て(祝日でない場合の value は false)
+    - 第4引数: true = 返却される Array の Value を祝日名称でなく、AstroTimeオブジェクトを含む Array とする
+      - Array( [日付] => Array( [name]=><祝日名称>, [time]=><AstroTime Object> ), .. )
+
+    ```php
+    $holidays = HolidayJp::itteratePeriodsFromDate('2019-01-01', '2019-04-01', 'date_string', true, true);
+    print_r($holidays);
+
+    Array
+    (
+        [2019-01-01] => Array
+            (
+                [name] => 元日
+                [time] => r28\AstroTime\AstroTime Object
+                    (
+                        [timezoneName] => Asia/Tokyo
+                        [local] => Cake\Chronos\Chronos Object
+                            (
+                                [hasFixedNow] =>
+                                [time] => 2019-01-01 00:00:00.000000
+                                [timezone] => Asia/Tokyo
+                            )
+
+                        [utc] => Cake\Chronos\Chronos Object
+                            (
+                                [hasFixedNow] =>
+                                [time] => 2018-12-31 15:00:00.000000
+                                [timezone] => UTC
+                            )
+
+                        [timestamp] => 1546268400
+                        [calendar_type] => gregorian
+                        [jd] => 2458484.125
+                        [mjd] => 58483.625
+                        [jc] => 0.18998288843258
+    【以下略】
+    )
+    ```
 
 # 対応祝日
 - 2019年用の「天皇の即位の日及び即位礼正殿の儀の行われる日を休日とする法律」に対応済
