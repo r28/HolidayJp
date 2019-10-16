@@ -29,6 +29,7 @@ require_once 'libs/StationalyHoliday.php';
 require_once 'libs/HappyMonday.php';
 require_once 'libs/SpecifiedMoved.php';
 require_once 'libs/Equinox.php';
+require_once 'libs/ExportCsv.php';
 
 /**
  * 日本の祝日判定
@@ -445,6 +446,33 @@ class HolidayJp
             $date = $date->addDays(1);
         }
         return $holidays;
+    }
+
+    /**
+     * 指定期間の各日の祝日名をCSVファイルに出力
+     * 
+     * @param   string  $dir    出力先ディレクトリ
+     * @param   string  $file   出力先CSVファイル名
+     * @param   string  $start  期間-始年月日文字列 (ex. 2019-01-01)
+     * @param   string  $end    期間-至年月日文字列 (ex. 2019-12-31)
+     * @param   boolean $is_only_holiday    true: 祝休日の日付のみ出力
+     * @return  boolean false: 指定期間中に祝日が存在しない、CSVの出力に失敗した場合
+     */
+    public static function exportCsvForPeriodsFromDate($dir, $file, $start, $end, $is_only_holiday=false) {
+        $holidays = static::itteratePeriodsFromDate($start, $end, 'date_string', $is_only_holiday, true);
+        if (! $holidays || empty($holidays)) {
+            return false;
+        }
+
+        try {
+            $export = new libs\ExportCsv($dir, $file);
+            $export->exportHolidays($holidays);
+
+        } catch (Exception $e) {
+            echo $e->getMessage().PHP_EOL;
+            return false;
+        }
+        return true;
     }
 
     /**
