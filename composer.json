@@ -1,6 +1,6 @@
 {
     "name": "r28/holiday-jp",
-    "description": "Judges datetime japanese holiday",
+    "description": "日本の祝日判定 / Judges datetime japanese holiday",
     "type": "library",
     "require-dev": {
         "phpunit/phpunit": "^7.5"
