@@ -114,6 +114,8 @@ class HolidayJp
      */
     static $autumnal_consts = [];
 
+    static $is_specified_removed = false;
+
     public $params = [
         'stationaly_holiday',
         'happy_monday',
@@ -180,33 +182,22 @@ class HolidayJp
         }
 
         $holiday = false;
-        $is_specified_removed = false;
+        self::$is_specified_removed = false;
 
-        // 特別措置法等により当該年のみの措置がある場合
-        $holiday = self::specifiedMovedHoliday($date, $this->params['specified_moved']);
-        if ($holiday === libs\SpecifiedMoved::IS_REMOVED_TYPE) {
-            $is_specified_removed = true;
-            $holiday = false;
-        }
-        if ($holiday && ! $is_specified_removed) {
-            return $holiday;
+        $holiday = self::generalHoliday($date, $this->params);
+        if (self::$is_specified_removed) {
+            // 特措法等により当該年のみ祝日
+            if ($holiday) return $holiday;
         }
 
-        if (! $is_specified_removed) {
-            // 固定/春秋分/ハッピーマンデー判定
-            // (特別措置法によって当該年のみ他の日に移動した場合は除く)
-            $holiday = self::stationalyHoliday($date, $this->params['stationaly_holiday']);
-            if (! $holiday) {
-                $holiday = self::equinoxHoliday($date, $this->params['equinox_holiday']);
-            }
-            if (! $holiday) {
-                $holiday = self::happyMonday($date, $this->params['happy_monday']);
-            }
+        if (! $holiday && ! self::$is_specified_removed) {
+            // ハッピーマンデー
+            $holiday = self::happyMonday($date, $this->params['happy_monday']);
         }
 
         if (! $holiday) {
             // 振替休日判定
-            $holiday = (self::isMondayMakeupHoliday($date, $this->params['stationaly_holiday'])) 
+            $holiday = (self::isMondayMakeupHoliday($date, $this->params)) 
                 ? self::MONDAY_MAKEUP_HOLIDAY_NAME : false;
         }
 
@@ -214,6 +205,40 @@ class HolidayJp
             // 国民の休日判定
             $holiday = (self::isNationalHoliday($date, $this->params['stationaly_holiday']))
                 ? self::NATIONAL_HOLIDAY_NAME : false;
+        }
+
+        return $holiday;
+    }
+
+    /**
+     * 特措法/固定/春秋分
+     *
+     * @param   AstroTime   $date   判定対象日時(AstroTime Object)
+     * @param   object      $params 設定
+     * @return  string|boolean  祝日名
+     */
+    public static function generalHoliday(AstroTime $date, $params=null) {
+        self::$is_specified_removed = false;
+
+        // 特別措置法等により当該年のみの措置がある場合
+        $holiday = self::specifiedMovedHoliday($date, $params['specified_moved']);
+        if ($holiday === libs\SpecifiedMoved::IS_REMOVED_TYPE) {
+            self::$is_specified_removed = true;
+            $holiday = false;
+        }
+
+        if ($holiday && ! self::$is_specified_removed) {
+            self::$is_specified_removed = true;
+            return $holiday;
+        }
+
+        if (! self::$is_specified_removed) {
+            // 固定/春秋分
+            // (特別措置法によって当該年のみ他の日に移動した場合は除く)
+            $holiday = self::stationalyHoliday($date, $params['stationaly_holiday']);
+            if (! $holiday) {
+                $holiday = self::equinoxHoliday($date, $params['equinox_holiday']);
+            }
         }
         return $holiday;
     }
@@ -272,16 +297,16 @@ class HolidayJp
      *  - 日曜が祝日の場合、翌日の月曜日以降の国民の祝日でない祝日の翌日
      *
      * @param   AstroTime   $date   判定対象日時(AstroTime Object)
-     * @param   object      $stationaly_params 設定
+     * @param   object      $params 設定
      * @param   boolean     $is_check_holiday   当日が祝日かどうか判定するか?
      * @return  boolean
      */
-    public static function isMondayMakeupHoliday(AstroTime $date, $stationaly_params=null, $is_check_holiday=false) {
+    public static function isMondayMakeupHoliday(AstroTime $date, $params=null, $is_check_holiday=false) {
         // 施行日より前
         $enforce = new AstroTime(self::MONDAY_MAKEUP_HOLIDAY_START." 00:00:00", static::TIMEZONE_NAME);
         if ($date < $enforce) return false;
 
-        if ($is_check_holiday && self::stationalyHoliday($date, $stationaly_params)) return false;
+        if ($is_check_holiday && self::stationalyHoliday($date, $params['stationaly_holiday'])) return false;
 
         $y = $date->year;
         $dt = clone $date;
@@ -291,7 +316,8 @@ class HolidayJp
         $dt = $dt->subDay(1);
         for ($i=0; $i<$n; $i++) {
             // 祝日かつ日曜の場合は振替休日
-            $holiday = self::stationalyHoliday($dt, $stationaly_params);
+            //$holiday = self::stationalyHoliday($dt, $stationaly_params);
+            $holiday = self::generalHoliday($dt, $params);
             if ($holiday && in_array($dt->dayOfWeek, [0,7])) return true;
             if (! $holiday) break;
             $dt = $dt->subDay(1);

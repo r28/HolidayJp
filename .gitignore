@@ -1,6 +1,6 @@
 /vendor
 .env
 /exports
-test.php
+test*.php
 *.bak
 *.swp
