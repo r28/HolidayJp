@@ -156,10 +156,10 @@ class HolidayJp
      */
     public function setParams() {
         $this->params = [
-            'stationaly_holiday'    => libs\StationalyHoliday::parseSetting(),
-            'happy_monday'          => libs\HappyMonday::parseSetting(),
-            'equinox_holiday'       => libs\Equinox::parseSetting(),
-            'specified_moved'       => libs\SpecifiedMoved::parseSetting(),
+            'stationaly_holiday'    => [ 'setting' => libs\StationalyHoliday::parseSetting(), 'desc' => '固定の祝日' ],
+            'happy_monday'          => [ 'setting' => libs\HappyMonday::parseSetting(), 'desc' => 'ハッピーマンデー' ],
+            'equinox_holiday'       => [ 'setting' => libs\Equinox::parseSetting(), 'desc' => '春秋分' ],
+            'specified_moved'       => [ 'setting' => libs\SpecifiedMoved::parseSetting(), 'desc' => '限定移動(特措法等)' ],
         ];
         return $this;
     }
@@ -192,7 +192,7 @@ class HolidayJp
 
         if (! $holiday && ! self::$is_specified_removed) {
             // ハッピーマンデー
-            $holiday = self::happyMonday($date, $this->params['happy_monday']);
+            $holiday = self::happyMonday($date, $this->params['happy_monday']['setting']);
         }
 
         if (! $holiday) {
@@ -203,7 +203,7 @@ class HolidayJp
 
         if (! $holiday) {
             // 国民の休日判定
-            $holiday = (self::isNationalHoliday($date, $this->params['stationaly_holiday']))
+            $holiday = (self::isNationalHoliday($date, $this->params['stationaly_holiday']['setting']))
                 ? self::NATIONAL_HOLIDAY_NAME : false;
         }
 
@@ -221,7 +221,7 @@ class HolidayJp
         self::$is_specified_removed = false;
 
         // 特別措置法等により当該年のみの措置がある場合
-        $holiday = self::specifiedMovedHoliday($date, $params['specified_moved']);
+        $holiday = self::specifiedMovedHoliday($date, $params['specified_moved']['setting']);
         if ($holiday === libs\SpecifiedMoved::IS_REMOVED_TYPE) {
             self::$is_specified_removed = true;
             $holiday = false;
@@ -235,9 +235,9 @@ class HolidayJp
         if (! self::$is_specified_removed) {
             // 固定/春秋分
             // (特別措置法によって当該年のみ他の日に移動した場合は除く)
-            $holiday = self::stationalyHoliday($date, $params['stationaly_holiday']);
+            $holiday = self::stationalyHoliday($date, $params['stationaly_holiday']['setting']);
             if (! $holiday) {
-                $holiday = self::equinoxHoliday($date, $params['equinox_holiday']);
+                $holiday = self::equinoxHoliday($date, $params['equinox_holiday']['setting']);
             }
         }
         return $holiday;
@@ -306,7 +306,7 @@ class HolidayJp
         $enforce = new AstroTime(self::MONDAY_MAKEUP_HOLIDAY_START." 00:00:00", static::TIMEZONE_NAME);
         if ($date < $enforce) return false;
 
-        if ($is_check_holiday && self::stationalyHoliday($date, $params['stationaly_holiday'])) return false;
+        if ($is_check_holiday && self::stationalyHoliday($date, $params['stationaly_holiday']['setting'])) return false;
 
         $y = $date->year;
         $dt = clone $date;
@@ -529,5 +529,37 @@ class HolidayJp
         }
 
         return $res;
+    }
+
+    /**
+     * 設定ファイル編集メニュー表示
+     * 
+     */
+    public function editSettingMainMenu() {
+        echo PHP_EOL;
+        echo str_repeat("=", 20).PHP_EOL;
+        echo "[祝日設定]".PHP_EOL;
+        echo str_repeat("=", 20).PHP_EOL;
+        echo PHP_EOL;
+
+        $n = 1;
+        $params = [];
+        foreach ($this->params as $key=>$param) {
+            $params[$n] = $key;
+            echo " \033[0;32m{$n} ) {$param['desc']}\033[0m".PHP_EOL;
+            $n++;
+        }
+
+        echo PHP_EOL;
+        echo "  設定する祝日の番号を選んでください > ";
+        $num = (int) trim(fgets(STDIN));
+        if (empty($num) || ! isset($params[$num])) {
+            echo "\033[0;31m  終了します!\033[0m".PHP_EOL;
+            exit;
+        }
+
+        $selected = $this->params[$params[$num]];
+        echo "  選択 : {$selected['desc']}".PHP_EOL;
+
     }
 }

@@ -56,20 +56,45 @@ class HolidayJpTest extends PHPUnit\Framework\TestCase
             '2020/11/03' => '文化の日',
             '2020/11/23' => '勤労感謝の日',
         ],
+        2021 => [
+            '2021/01/01' => '元日',
+            '2021/01/11' => '成人の日',
+            '2021/02/11' => '建国記念の日',
+            '2021/02/23' => '天皇誕生日',
+            '2021/03/20' => '春分の日',
+            '2021/04/29' => '昭和の日',
+            '2021/05/03' => '憲法記念日',
+            '2021/05/04' => 'みどりの日',
+            '2021/05/05' => 'こどもの日',
+            '2021/07/22' => '海の日',
+            '2021/07/23' => 'スポーツの日',
+            '2021/08/08' => '山の日',
+            '2021/08/09' => '振替休日',
+            '2021/09/20' => '敬老の日',
+            '2021/09/23' => '秋分の日',
+            '2021/11/03' => '文化の日',
+            '2021/11/23' => '勤労感謝の日',
+        ],
     ];
 
     protected static $announcedHolidaysForItterate = [
-        '2019/04/29' => '昭和の日',
-        '2019/04/30' => '国民の休日',
-        '2019/05/01' => '天皇即位の日',
-        '2019/05/02' => '国民の休日',
-        '2019/05/03' => '憲法記念日',
-        '2019/05/04' => 'みどりの日',
-        '2019/05/05' => 'こどもの日',
-        '2019/05/06' => '振替休日',
-        '2019/07/15' => '海の日',
-        '2019/08/11' => '山の日',
-        '2019/08/12' => '振替休日',
+        '2021/01/01' => '元日',
+        '2021/01/11' => '成人の日',
+        '2021/02/11' => '建国記念の日',
+        '2021/02/23' => '天皇誕生日',
+        '2021/03/20' => '春分の日',
+        '2021/04/29' => '昭和の日',
+        '2021/05/03' => '憲法記念日',
+        '2021/05/04' => 'みどりの日',
+        '2021/05/05' => 'こどもの日',
+        '2021/07/22' => '海の日',
+        '2021/07/23' => 'スポーツの日',
+        '2021/08/08' => '山の日',
+        '2021/08/09' => '振替休日',
+        '2021/09/20' => '敬老の日',
+        '2021/09/23' => '秋分の日',
+        '2021/11/03' => '文化の日',
+        '2021/11/23' => '勤労感謝の日',
     ];
 
     protected static $target_date = [ 'year'=>'2019', 'month'=>'05', 'day'=>'06', 
@@ -91,7 +116,7 @@ class HolidayJpTest extends PHPUnit\Framework\TestCase
         self::$date_string = self::$target_date['year']."/".self::$target_date['month']."/".self::$target_date['day'];
         self::$announced_date = self::$announcedHolidays[self::$target_date['year']][self::$date_string];
     }
-    
+
     public function test_holidayName() {
         $date = self::$date_string;
         $time = new AstroTime($date." 00:00:00", HolidayJp::TIMEZONE_NAME, false);
@@ -132,8 +157,8 @@ class HolidayJpTest extends PHPUnit\Framework\TestCase
     }
 
     public function test_itteratePeriodsFromDate() {
-        $start = new AstroTime("2019/04/29");
-        $end   = new AstroTime("2019/08/31");
+        $start = new AstroTime("2021/01/01");
+        $end   = new AstroTime("2021/12/31");
         $this->assertEquals(self::$announcedHolidaysForItterate,
             HolidayJp::itteratePeriodsFromDate($start, $end, 'date_slash', true));
     }
