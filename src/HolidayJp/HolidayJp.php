@@ -25,6 +25,7 @@ set_include_path(get_include_path().':'.dirname(__FILE__).'/libs/');
 set_include_path(get_include_path().':'.dirname(__FILE__).'/settings/');
 
 use r28\AstroTime\AstroTime;
+require_once 'libs/AdditionalHoliday.php';
 require_once 'libs/StationalyHoliday.php';
 require_once 'libs/HappyMonday.php';
 require_once 'libs/SpecifiedMoved.php';
@@ -117,6 +118,7 @@ class HolidayJp
     static $is_specified_removed = false;
 
     public $params = [
+        'additional_holiday',
         'stationaly_holiday',
         'happy_monday',
         'equinox_holiday',
@@ -156,10 +158,11 @@ class HolidayJp
      */
     public function setParams() {
         $this->params = [
-            'stationaly_holiday'    => [ 'setting' => libs\StationalyHoliday::parseSetting(), 'desc' => '固定の祝日' ],
-            'happy_monday'          => [ 'setting' => libs\HappyMonday::parseSetting(), 'desc' => 'ハッピーマンデー' ],
-            'equinox_holiday'       => [ 'setting' => libs\Equinox::parseSetting(), 'desc' => '春秋分' ],
-            'specified_moved'       => [ 'setting' => libs\SpecifiedMoved::parseSetting(), 'desc' => '限定移動(特措法等)' ],
+            'stationaly_holiday'    => [ 'class_name'=> 'StationalyHoliday', 'setting' => libs\StationalyHoliday::parseSetting(), 'desc' => '固定の祝日' ],
+            'happy_monday'          => [ 'class_name'=> 'HappyMonday',       'setting' => libs\HappyMonday::parseSetting(), 'desc' => 'ハッピーマンデー' ],
+            'equinox_holiday'       => [ 'class_name'=> 'Equinox',           'setting' => libs\Equinox::parseSetting(), 'desc' => '春秋分' ],
+            'specified_moved'       => [ 'class_name'=> 'SpecifiedMoved',    'setting' => libs\SpecifiedMoved::parseSetting(), 'desc' => '限定移動(特措法等)' ],
+            'additional_holiday'    => [ 'class_name'=> 'AdditionalHoliday', 'setting' => libs\AdditionalHoliday::parseSetting(), 'desc' => '任意の休日' ],
         ];
         return $this;
     }
@@ -184,6 +187,12 @@ class HolidayJp
         $holiday = false;
         self::$is_specified_removed = false;
 
+        // 任意の休日
+        $holiday = self::additionalHoliday($date, $this->params['additional_holiday']['setting']);
+        if ($holiday) {
+            return $holiday;
+        }
+
         $holiday = self::generalHoliday($date, $this->params);
         if (self::$is_specified_removed) {
             // 特措法等により当該年のみ祝日
@@ -207,6 +216,18 @@ class HolidayJp
                 ? self::NATIONAL_HOLIDAY_NAME : false;
         }
 
+        return $holiday;
+    }
+
+    /**
+     * 任意の休日
+     * 
+     * @param   AstroTime   $date   判定対象日時(AstroTime Object)
+     * @param   object      $params 設定
+     * @return  string|boolean  休日名
+     */
+    public static function additionalHoliday($date, $params) {
+        $holiday = libs\additionalHoliday::isMatched($date, $params);
         return $holiday;
     }
 
@@ -531,35 +552,4 @@ class HolidayJp
         return $res;
     }
 
-    /**
-     * 設定ファイル編集メニュー表示
-     * 
-     */
-    public function editSettingMainMenu() {
-        echo PHP_EOL;
-        echo str_repeat("=", 20).PHP_EOL;
-        echo "[祝日設定]".PHP_EOL;
-        echo str_repeat("=", 20).PHP_EOL;
-        echo PHP_EOL;
-
-        $n = 1;
-        $params = [];
-        foreach ($this->params as $key=>$param) {
-            $params[$n] = $key;
-            echo " \033[0;32m{$n} ) {$param['desc']}\033[0m".PHP_EOL;
-            $n++;
-        }
-
-        echo PHP_EOL;
-        echo "  設定する祝日の番号を選んでください > ";
-        $num = (int) trim(fgets(STDIN));
-        if (empty($num) || ! isset($params[$num])) {
-            echo "\033[0;31m  終了します!\033[0m".PHP_EOL;
-            exit;
-        }
-
-        $selected = $this->params[$params[$num]];
-        echo "  選択 : {$selected['desc']}".PHP_EOL;
-
-    }
 }
